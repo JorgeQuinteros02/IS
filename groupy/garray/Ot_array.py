@@ -23,7 +23,7 @@ class OtArray(MatrixGArray):
 
     def __init__(self, data, p='int'):
         data = np.asarray(data)
-        assert data.dtype == np.int
+        assert np.issubdtype(data.dtype, np.integer)
         self._left_actions[OtArray] = self.__class__.left_action_hmat
         super(OtArray, self).__init__(data, p)
         self.base_elements = self.get_base_elements()
@@ -37,8 +37,8 @@ class OtArray(MatrixGArray):
         '''
 
         input = hmat_data.reshape((-1, 4, 4))
-        data = np.zeros((input.shape[0], 4), dtype=np.int)
-        for i in xrange(input.shape[0]):
+        data = np.zeros((input.shape[0], 4), dtype = np.dtype('int64'))
+        for i in range(input.shape[0]):
             hmat = input[i]
             mat = [elem[0:3] for elem in hmat.tolist()][0:3]
             index = self.base_elements.index(mat)
@@ -60,9 +60,9 @@ class OtArray(MatrixGArray):
         u = int_data[..., 1].flatten()
         v = int_data[..., 2].flatten()
         w = int_data[..., 3].flatten()
-        data = np.zeros((len(i),) + (4, 4), dtype=np.int)
+        data = np.zeros((len(i),) + (4, 4), dtype = np.dtype('int64'))
 
-        for j in xrange(len(i)):
+        for j in range(len(i)):
             mat = self.base_elements[i[j]]
             data[j, 0:3, 0:3] = mat
             data[j, 0, 3] = u[j]
@@ -109,7 +109,7 @@ def identity(shape=(), p='int'):
     Returns the identity element: a matrix with 1's on the diagonal.
     '''
     li = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
-    e = OtArray(data=np.array(li, dtype=np.int), p='hmat')
+    e = OtArray(data=np.array(li, dtype = np.dtype('int64')), p='hmat')
     return e.reparameterize(p)
 
 
@@ -117,7 +117,7 @@ def rand(minu, maxu, minv, maxv, minw, maxw, size=()):
     '''
     Returns an OtArray of shape size, with randomly chosen elements in int parameterization.
     '''
-    data = np.zeros(size + (4,), dtype=np.int64)
+    data = np.zeros(size + (4,), dtype=np.dtype('int64'))
     data[..., 0] = np.random.randint(0, 24, size)
     data[..., 1] = np.random.randint(minu, maxu, size)
     data[..., 2] = np.random.randint(minv, maxv, size)
@@ -126,6 +126,6 @@ def rand(minu, maxu, minv, maxv, minw, maxw, size=()):
 
 
 def meshgrid(minu=-1, maxu=2, minv=-1, maxv=2, minw=-1, maxw=2):
-    li = [[i, u, v, w] for i in xrange(24) for u in xrange(minu, maxu) for v in xrange(minv, maxv) for
-          w in xrange(minw, maxw)]
+    li = [[i, u, v, w] for i in range(24) for u in range(minu, maxu) for v in range(minv, maxv) for
+          w in range(minw, maxw)]
     return OtArray(li, p='int')

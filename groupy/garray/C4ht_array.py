@@ -18,7 +18,7 @@ class C4htArray(MatrixGArray):
 
     def __init__(self, data, p='int'):
         data = np.asarray(data)
-        assert data.dtype == np.int
+        assert np.issubdtype(data.dtype, np.integer)
         self._left_actions[C4htArray] = self.__class__.left_action_hmat
         super(C4htArray, self).__init__(data, p)
         self.elements = self.get_elements()
@@ -37,8 +37,8 @@ class C4htArray(MatrixGArray):
         '''
 
         input = hmat_data.reshape((-1, 4, 4))
-        data = np.zeros((input.shape[0], 5), dtype=np.int)
-        for i in xrange(input.shape[0]):
+        data = np.zeros((input.shape[0], 5), dtype = np.dtype('int64'))
+        for i in range(input.shape[0]):
             hmat = input[i]
             mat = [elem[0:3] for elem in hmat.tolist()][0:3]
             index = self.elements.index(mat)
@@ -67,9 +67,9 @@ class C4htArray(MatrixGArray):
         u = int_data[..., 2].flatten()
         v = int_data[..., 3].flatten()
         w = int_data[..., 4].flatten()
-        data = np.zeros((len(y),) + (4, 4), dtype=np.int)
+        data = np.zeros((len(y),) + (4, 4), dtype = np.dtype('int64'))
 
-        for j in xrange(len(y)):
+        for j in range(len(y)):
             index = (y[j] * 4) + z[j]
             mat = self.elements[index]
 
@@ -122,7 +122,7 @@ def rand(minu=0, maxu=5, minv=0, maxv=5, minw=0, maxw=5, size=()):
     '''
     Returns an C4htArray of shape size, with randomly chosen elements in int parameterization.
     '''
-    data = np.zeros(size + (5,), dtype=np.int64)
+    data = np.zeros(size + (5,), dtype=np.dtype('int64'))
     data[..., 0] = np.random.randint(0, 2, size)    # rotations over y
     data[..., 1] = np.random.randint(0, 4, size)    # rotations over x
     data[..., 2] = np.random.randint(minu, maxu, size)  # translation on x
@@ -136,7 +136,7 @@ def identity(p='int'):
     Returns the identity element: a matrix with 1's on the diagonal.
     '''
     li = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
-    e = C4htArray(data=np.array(li, dtype=np.int), p='hmat')
+    e = C4htArray(data=np.array(li, dtype = np.dtype('int64')), p='hmat')
     return e.reparameterize(p)
 
 
@@ -145,7 +145,7 @@ def meshgrid(minu=-1, maxu=2, minv=-1, maxv=2, minw=-1, maxw=2):
     Creates a meshgrid of all elements of the group, within the given
     translation parameters.
     '''
-    li = [[i, m, u, v, w] for i in xrange(2) for m in xrange(4) for u in xrange(minu, maxu) for v in xrange(minv, maxv)
+    li = [[i, m, u, v, w] for i in range(2) for m in range(4) for u in range(minu, maxu) for v in range(minv, maxv)
           for
-          w in xrange(minw, maxw)]
+          w in range(minw, maxw)]
     return C4htArray(li, p='int')

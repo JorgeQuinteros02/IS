@@ -20,7 +20,7 @@ class D4hArray(MatrixGArray):
 
     def __init__(self, data, p='int'):
         data = np.asarray(data)
-        assert data.dtype == np.int
+        assert np.issubdtype(data.dtype, np.integer)
 
         # classes OArray can be multiplied with
         self._left_actions[D4hArray] = self.__class__.left_action_hmat
@@ -44,8 +44,8 @@ class D4hArray(MatrixGArray):
         '''
 
         input = mat_data.reshape((-1, 3, 3))
-        data = np.zeros((input.shape[0], 3), dtype=np.int)
-        for i in xrange(input.shape[0]):
+        data = np.zeros((input.shape[0], 3), dtype = np.dtype('int64'))
+        for i in range(input.shape[0]):
             mat = input[i]
             # check for reflection
             if mat.tolist() not in self.elements:
@@ -71,9 +71,9 @@ class D4hArray(MatrixGArray):
         y = int_data[..., 0].flatten()
         z = int_data[..., 1].flatten()
         m = int_data[..., 2].flatten()
-        data = np.zeros((len(y),) + (3, 3), dtype=np.int)
+        data = np.zeros((len(y),) + (3, 3), dtype = np.dtype('int64'))
 
-        for j in xrange(len(y)):
+        for j in range(len(y)):
             index = (y[j] * 4) + z[j]
             mat = self.elements[index]
             mat = np.array(mat) * ((-1) ** m[j])    # mirror if reflection
@@ -118,7 +118,7 @@ class D4hGroup(FiniteGroup, D4hArray):
     def __init__(self):
         D4hArray.__init__(
             self,
-            data=np.array([[i, j, m] for i in xrange(2) for j in xrange(4) for m in xrange(2)]),
+            data=np.array([[i, j, m] for i in range(2) for j in range(4) for m in range(2)]),
             p='int'
         )
         FiniteGroup.__init__(self, D4hArray)
@@ -133,7 +133,7 @@ def rand(size=()):
     '''
     Returns an D4hArray of shape size, with randomly chosen elements in int parameterization.
     '''
-    data = np.zeros(size + (3,), dtype=np.int)
+    data = np.zeros(size + (3,), dtype = np.dtype('int64'))
     data[..., 0] = np.random.randint(0, 2, size)
     data[..., 1] = np.random.randint(0, 4, size)
     data[..., 2] = np.random.randint(0, 2, size)
@@ -144,5 +144,5 @@ def identity(p='int'):
     Returns the identity element: a matrix with 1's on the diagonal.
     '''
     li = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-    e = D4hArray(data=np.array(li, dtype=np.int), p='mat')
+    e = D4hArray(data=np.array(li, dtype = np.dtype('int64')), p='mat')
     return e.reparameterize(p)

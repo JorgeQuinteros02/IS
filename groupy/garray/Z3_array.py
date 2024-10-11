@@ -12,7 +12,7 @@ class Z3Array(GArray):
 
     def __init__(self, data, p='int'):
         data = np.asarray(data)
-        assert data.dtype == np.int
+        assert np.issubdtype(data.dtype, np.integer)
         self._left_actions[Z3Array] = self.__class__.z3_composition
         super(Z3Array, self).__init__(data, p)
 
@@ -34,7 +34,7 @@ def identity(shape=()):
     '''
     Returns the identity element: an array of 3 zeros.
     '''
-    e = Z3Array(np.zeros(shape + (3,), dtype=np.int), 'int')
+    e = Z3Array(np.zeros(shape + (3,), dtype = np.dtype('int64')), 'int')
     return e
 
 
@@ -42,7 +42,7 @@ def rand(minu, maxu, minv, maxv, minw, maxw, size=()):
     '''
     Returns an Z3Array of shape size, with randomly chosen elements in int parameterization.
     '''
-    data = np.zeros(size + (3,), dtype=np.int64)
+    data = np.zeros(size + (3,), dtype=np.dtype('int64'))
     data[..., 0] = np.random.randint(minu, maxu, size)
     data[..., 1] = np.random.randint(minv, maxv, size)
     data[..., 2] = np.random.randint(minw, maxw, size)
@@ -54,6 +54,6 @@ def meshgrid(minu=-1, maxu=2, minv=-1, maxv=2, minw=-1, maxw=2):
     Creates a meshgrid of all elements of the group, within the given
     translation parameters.
     '''
-    li = [[u, v, w] for u in xrange(minu, maxu) for v in xrange(minv, maxv) for
-          w in xrange(minw, maxw)]
+    li = [[u, v, w] for u in range(minu, maxu) for v in range(minv, maxv) for
+          w in range(minw, maxw)]
     return Z3Array(li, p='int')

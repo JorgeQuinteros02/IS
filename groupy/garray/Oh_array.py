@@ -29,7 +29,7 @@ class OhArray(MatrixGArray):
 
     def __init__(self, data, p='int'):
         data = np.asarray(data)
-        assert data.dtype == np.int
+        assert np.issubdtype(data.dtype, np.integer)
         self._left_actions[OhArray] = self.__class__.left_action_hmat
         self._left_actions[OhtArray] = self.__class__.left_action_hmat
         self._left_actions[Z3Array] = self.__class__.left_action_vec
@@ -45,8 +45,8 @@ class OhArray(MatrixGArray):
         '''
 
         input = mat_data.reshape((-1, 3, 3))
-        data = np.zeros((input.shape[0], 2), dtype=np.int)
-        for i in xrange(input.shape[0]):
+        data = np.zeros((input.shape[0], 2), dtype = np.dtype('int64'))
+        for i in range(input.shape[0]):
             mat = input[i]
             index, mirror = self.get_int(mat)
             data[i, 0] = index
@@ -75,9 +75,9 @@ class OhArray(MatrixGArray):
         '''
         index = int_data[..., 0].flatten()
         m = int_data[..., 1].flatten()
-        data = np.zeros((len(index),) + (3, 3), dtype=np.int)
+        data = np.zeros((len(index),) + (3, 3), dtype = np.dtype('int64'))
 
-        for j in xrange(len(index)):
+        for j in range(len(index)):
             hmat = self.get_mat(index[j], m[j])
             data[j, 0:3, 0:3] = hmat
 
@@ -91,9 +91,9 @@ class OhArray(MatrixGArray):
         (note: deepcopy to avoid alterations to original self.base_elements)
         '''
         element = copy.deepcopy(self.elements[index])
-        element = np.array(element, dtype=np.int)
+        element = np.array(element, dtype = np.dtype('int64'))
         element[0:3] = element[0:3] * ((-1) ** mirror)
-        element = element.astype(dtype=np.int)
+        element = element.astype(dtype = np.dtype('int64'))
         return element
 
     def get_elements(self):
@@ -120,7 +120,7 @@ class OhGroup(FiniteGroup, OhArray):
     def __init__(self):
         OhArray.__init__(
             self,
-            data=np.array([[i, j] for i in xrange(24) for j in xrange(2)]),
+            data=np.array([[i, j] for i in range(24) for j in range(2)]),
             p='int'
         )
         FiniteGroup.__init__(self, OhArray)
@@ -136,7 +136,7 @@ def rand(size=()):
     '''
     Returns an OhArray of shape size, with randomly chosen elements in int parameterization.
     '''
-    data = np.zeros(size + (2,), dtype=np.int)
+    data = np.zeros(size + (2,), dtype = np.dtype('int64'))
     data[..., 0] = np.random.randint(0, 24, size)
     data[..., 1] = np.random.randint(0, 2, size)
     return OhArray(data=data, p='int')
@@ -147,7 +147,7 @@ def identity(p='int'):
     Returns the identity element: a matrix with 1's on the diagonal.
     '''
     li = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-    e = OhArray(data=np.array(li, dtype=np.int), p='mat')
+    e = OhArray(data=np.array(li, dtype = np.dtype('int64')), p='mat')
     return e.reparameterize(p)
 
 
@@ -156,4 +156,4 @@ def meshgrid(i=24, m=2):
     Creates a meshgrid of all elements of the group, within the given
     translation parameters.
     '''
-    return OhArray([[[k, l] for l in xrange(m)] for k in xrange(i)])
+    return OhArray([[[k, l] for l in range(m)] for k in range(i)])

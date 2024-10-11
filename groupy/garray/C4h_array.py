@@ -28,7 +28,7 @@ class C4hArray(MatrixGArray):
 
     def __init__(self, data, p='int'):
         data = np.asarray(data)
-        assert data.dtype == np.int
+        assert np.issubdtype(data.dtype, np.integer)
 
         # classes C4hArray can be multiplied with
         self._left_actions[C4hArray] = self.__class__.left_action_hmat
@@ -51,8 +51,8 @@ class C4hArray(MatrixGArray):
         '''
 
         input = mat_data.reshape((-1, 3, 3))
-        data = np.zeros((input.shape[0], 2), dtype=np.int)
-        for i in xrange(input.shape[0]):
+        data = np.zeros((input.shape[0], 2), dtype = np.dtype('int64'))
+        for i in range(input.shape[0]):
             index = self.elements.index(input[i].tolist())
             z = int(index % 4)
             y = int((index - z) / 4)
@@ -71,9 +71,9 @@ class C4hArray(MatrixGArray):
         '''
         y = int_data[..., 0].flatten()
         z = int_data[..., 1].flatten()
-        data = np.zeros((len(y),) + (3, 3), dtype=np.int)
+        data = np.zeros((len(y),) + (3, 3), dtype = np.dtype('int64'))
 
-        for j in xrange(len(y)):
+        for j in range(len(y)):
             index = (y[j] * 4) + z[j]
             mat = self.elements[index]
             data[j, 0:3, 0:3] = mat
@@ -120,7 +120,7 @@ class C4hGroup(FiniteGroup, C4hArray):
     def __init__(self):
         C4hArray.__init__(
             self,
-            data=np.array([[i, j] for i in xrange(2) for j in xrange(4)]),
+            data=np.array([[i, j] for i in range(2) for j in range(4)]),
             p='int'
         )
         FiniteGroup.__init__(self, C4hArray)
@@ -134,7 +134,7 @@ def rand(size=()):
     '''
     Returns an C4hArray of shape size, with randomly chosen elements in int parameterization.
     '''
-    data = np.zeros(size + (2,), dtype=np.int)
+    data = np.zeros(size + (2,), dtype = np.dtype('int64'))
     data[..., 0] = np.random.randint(0, 2, size)    # rotations over y
     data[..., 1] = np.random.randint(0, 4, size)    # rotations over z
     return C4hArray(data=data, p='int')
@@ -144,5 +144,5 @@ def identity(p='int'):
     Returns the identity element: a matrix with 1's on the diagonal.
     '''
     li = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-    e = C4hArray(data=np.array(li, dtype=np.int), p='mat')
+    e = C4hArray(data=np.array(li, dtype = np.dtype('int64')), p='mat')
     return e.reparameterize(p)
