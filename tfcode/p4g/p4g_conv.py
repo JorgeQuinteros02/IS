@@ -1,3 +1,5 @@
+"""Adaptation of utility functions from keras-gcnn package for P4G."""
+
 import numpy as np
 
 from groupy.garray.D4_array import D4
