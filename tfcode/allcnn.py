@@ -1,6 +1,6 @@
 from keras import Model, layers
 
-
+# make ALL-CNN-C as described by the Springerberg Experiment
 def make_allcnn():
     inputs = layers.Input((32, 32, 3))
 

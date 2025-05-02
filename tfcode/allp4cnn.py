@@ -2,6 +2,7 @@ from keras import Model, layers
 from keras_gcnn.layers import GConv2D
 
 
+# return ALL-CNN with all convolutions replaced by p4-convolutions
 def make_allp4cnn():
     inputs = layers.Input((32, 32, 3))
 

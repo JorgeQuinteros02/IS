@@ -1,3 +1,5 @@
+"""To run the experiments from this paper, simply run this python script"""
+
 import numpy as np
 import tensorflow as tf
 from keras import optimizers, losses, metrics, callbacks
@@ -6,7 +8,7 @@ from allcnn import make_allcnn
 from allp4cnn import make_allp4cnn
 from allp4mcnn import make_allp4mcnn
 
-
+# main function that runs reported experiments
 def run_cifar10():
     train_data, train_labels, val_data, val_labels = get_cifar10_data(
         datadir="./data/cifar",
@@ -56,7 +58,7 @@ def run_cifar10():
 
     return (allcnn, allp4cnn, allp4mcnn)
 
-
+# callback function to allow variable learning get
 def scheduler(epoch, lr):
     if epoch in (200, 250, 300):
         return lr * 0.1
