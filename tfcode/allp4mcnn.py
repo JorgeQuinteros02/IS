@@ -2,7 +2,7 @@ from keras import layers, Model
 from keras_gcnn.layers import GConv2D
 
 
-def make_p4mcnn():
+def make_allp4mcnn():
     inputs = layers.Input((32, 32, 3))
 
     out_channels = [32, 32, 32, 64, 64, 64, 64, 64, 10]
