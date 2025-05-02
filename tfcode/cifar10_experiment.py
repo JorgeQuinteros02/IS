@@ -68,3 +68,4 @@ if __name__ == "__main__":
     models = run_cifar10()
     for model in models:
         model.save(model + ".keras")
+        del model

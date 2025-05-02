@@ -58,6 +58,7 @@ def make_p4cnn():
 
     return p4cnn_model
 
+
 if __name__ == "__main__":
     (x_test, y_test), (x_train, y_train) = keras.datasets.mnist.load_data()
 
@@ -80,16 +81,12 @@ if __name__ == "__main__":
     x_test = data_augmentation(x_test)
     x_val = data_augmentation(x_val)
 
-
-
     models = {"z2c": make_z2cnn,
               "p4": make_p4cnn}
     epochs = 100
     repeats = 10
 
     starttime = time.time()
-
-
 
     for i in range(repeats):
         tf.random.set_seed(i)
@@ -110,9 +107,7 @@ if __name__ == "__main__":
 
             with open("mnist_rot" + str(starttime) + ".txt", "a") as file:
                 f = csv.writer(file)
-                f.writerow([key, i, epochs, loss, accuracy])
-
-                
+                f.writerow([key, i, epochs, loss, accuracy])   
 
             del model
 
