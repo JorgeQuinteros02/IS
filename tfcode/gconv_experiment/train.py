@@ -1,10 +1,11 @@
+"""This module contains functionality to preprocess data from MNIST.
+lines below were extracted from code published by Cohen and Welling (2016)."""
 import sys
 sys.path.append('../../')
 
 import numpy as np
 
 def preprocess_mnist_data(train_data, test_data, train_labels, test_labels):
-
     train_mean = np.mean(train_data)  # compute mean over all pixels make sure equivariance is preserved
     train_data -= train_mean
     test_data -= train_mean
