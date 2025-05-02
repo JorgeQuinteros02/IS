@@ -3,30 +3,9 @@ import numpy as np
 from groupy.garray.matrix_garray import MatrixGArray
 from groupy.garray.Z2_array import Z2Array
 
-# A transformation in p4m can be coded using four integers:
-# m in {0, 1}, mirror reflection in the second translation axis or not
-# r in {0, 1, 2, 3}, the rotation index
-# u, translation along the first spatial axis
-# v, translation along the second spatial axis
-# We will always store these in the order (m, r, u, v).
-# This is called the 'int' parameterization of p4m.
-
-# A matrix representation of this group is given by
-# T(u, v) M(m) R(r)
-# where
-# T = [[ 1, 0, u],
-#      [ 0, 1, v],
-#      [ 0, 0, 1]]
-# M = [[ (-1) ** m, 0, 0],
-#      [ 0,         1, m],
-#      [ 0,         0, 1]]
-# R = [[ cos(r pi / 2), -sin(r pi /2), 0],
-#      [ sin(r pi / 2), cos(r pi / 2), 0],
-#      [ 0,             0,             1]]
-# This is called the 'hmat' (homogeneous matrix) parameterization of p4m.
-
-# The matrix representation is easier to work with when multiplying and inverting group elements,
-# while the integer parameterization is required when indexing gfunc on p4m.
+"""This is my adaptation of the P4M array by Cohen and Welling (2016).
+The only meaningful change is in the int2hmat and hmat2int methods.
+"""
 
 
 class P4GArray(MatrixGArray):
